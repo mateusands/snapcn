@@ -9,9 +9,12 @@ describe("suggestComponents", () => {
     // Verbatim from thirty days of `registry_component_missing`. None of these
     // is a typo of anything we ship, and offering the least-bad name in the
     // registry would send someone to install the wrong component confidently.
+    //
+    // "dynamic-grid" used to be on this list and has come off it: we now ship
+    // `count-grid`, so someone asking for a dynamic grid is being pointed at a
+    // grid, which is the suggester working rather than guessing.
     for (const invented of [
       "blur-out-up",
-      "dynamic-grid",
       "soft-blur-in",
       "number-wheel",
       "shader-warp",

@@ -359,6 +359,22 @@
       ]
     },
     {
+      "name": "count-grid",
+      "type": "registry:component",
+      "docs": "Docs and props: https://snapcn.dev/docs/scenes/count-grid?ref=cli \u2014 pass cards an array of image URLs and from/to/noun for the label.",
+      "title": "Count Grid",
+      "description": "A grid of cards rushes in under a horizontal smear, settles on five and a label, then the camera pulls back a fraction while every empty cell around them fills in from the middle out and the number jumps. The \"and it scales\" shot, without a cut \u2014 one card is deliberately late to land, which is what makes the entry read as five separate things arriving rather than one picture being pushed in.",
+      "dependencies": ["remotion", "@remotion/google-fonts"],
+      "registryDependencies": ["https://snapcn.dev/r/snap-cn-ui.json"],
+      "files": [
+        {
+          "path": "count-grid/index.tsx",
+          "type": "registry:component",
+          "target": "components/snap-cn/count-grid.tsx"
+        }
+      ]
+    },
+    {
       "name": "cursor-track",
       "type": "registry:component",
       "docs": "Docs and props: https://snapcn.dev/docs/screens/cursor-track?ref=cli \u2014 pass mode=\"dark\" if you are rendering onto a dark frame \u2014 these default to shadcn's light palette and a bare Remotion render is black.",

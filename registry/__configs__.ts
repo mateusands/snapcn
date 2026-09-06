@@ -4,6 +4,7 @@ import { announceTitleConfig } from "@/registry/snap-cn/announce-title/config";
 import { answerHighlightConfig } from "@/registry/snap-cn/answer-highlight/config";
 import { answerStreamConfig } from "@/registry/snap-cn/answer-stream/config";
 import { blockWordmarkConfig } from "@/registry/snap-cn/block-wordmark/config";
+import { countGridConfig } from "@/registry/snap-cn/count-grid/config";
 import { cursorTrackConfig } from "@/registry/snap-cn/cursor-track/config";
 import { followerRushConfig } from "@/registry/snap-cn/follower-rush/config";
 import { heroLaunchConfig } from "@/registry/snap-cn/hero-launch/config";
@@ -51,6 +52,7 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "answer-highlight": answerHighlightConfig,
   "answer-stream": answerStreamConfig,
   "block-wordmark": blockWordmarkConfig,
+  "count-grid": countGridConfig,
   "cursor-track": cursorTrackConfig,
   "follower-rush": followerRushConfig,
   "hero-launch": heroLaunchConfig,
