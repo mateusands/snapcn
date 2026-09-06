@@ -6,6 +6,7 @@ import { AnnounceTitle } from "@/registry/snap-cn/announce-title";
 import { AnswerHighlight } from "@/registry/snap-cn/answer-highlight";
 import { AnswerStream } from "@/registry/snap-cn/answer-stream";
 import { BlockWordmark } from "@/registry/snap-cn/block-wordmark";
+import { CountGrid } from "@/registry/snap-cn/count-grid";
 import { CursorTrack } from "@/registry/snap-cn/cursor-track";
 import { FollowerRush } from "@/registry/snap-cn/follower-rush";
 import { HeroLaunch } from "@/registry/snap-cn/hero-launch";
@@ -69,6 +70,7 @@ const registry: Record<string, RegistryEntry> = {
     Component: BlockWordmark,
     config: CONFIGS["block-wordmark"],
   },
+  "count-grid": { Component: CountGrid, config: CONFIGS["count-grid"] },
   "cursor-track": { Component: CursorTrack, config: CONFIGS["cursor-track"] },
   "follower-rush": {
     Component: FollowerRush,

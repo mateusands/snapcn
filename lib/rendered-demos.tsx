@@ -152,33 +152,49 @@ export function RenderedDemo({
  * already painted, and `load` arrives before anyone has finished reading the
  * heading.
  *
+ * Exported for the test that pins the staleness bug: the only way to catch it
+ * is to call this once while the document is still loading and again after it
+ * has finished, on a fresh element, and a pure helper cannot see that.
+ *
  * ponytail: no cap on concurrent playback — a wide `/docs/components` can run
  * all 22 at once, which is what the grid is *for*, at the cost of ~9.9MB and a
  * page that never goes idle. `preload="none"` still means a card never scrolled
  * to is never fetched. If mobile data or fan noise ever becomes the complaint,
  * the fix is a cap on the most-visible N, not a return to hover-to-play.
  */
-let pageLoaded =
-  typeof document === "undefined" || document.readyState === "complete";
 const waitingForLoad = new Set<HTMLVideoElement>();
+let listening = false;
 
-function playWhenLoaded(el: HTMLVideoElement): void {
-  if (pageLoaded) {
+export function playWhenLoaded(el: HTMLVideoElement): void {
+  // Read `readyState` here, on every call — never once at module scope.
+  //
+  // This is a client-side-routed site, and `window`'s `load` fires exactly once
+  // per hard navigation. A module-scope snapshot is taken while the *first*
+  // page is still loading, so it says `false`; if no demo happens to be on that
+  // first page, nothing ever queues, the listener is never attached, and the
+  // stale `false` outlives the only `load` there will ever be. Every card
+  // reached by client navigation from then on queues for an event that has
+  // already fired and sits on its poster forever — which is exactly the report:
+  // hard-refresh `/docs/components` and the grid runs, navigate to it and it is
+  // a wall of stills.
+  //
+  // `readyState` stays "complete" for the rest of the session, so asking it
+  // each time answers both cases with one branch.
+  if (typeof document === "undefined" || document.readyState === "complete") {
     if (el.paused) void el.play().catch(() => {});
     return;
   }
-  if (waitingForLoad.size === 0) {
-    window.addEventListener(
-      "load",
-      () => {
-        pageLoaded = true;
-        for (const pending of waitingForLoad) {
-          if (pending.paused) void pending.play().catch(() => {});
-        }
-        waitingForLoad.clear();
-      },
-      { once: true },
-    );
-  }
   waitingForLoad.add(el);
+  if (listening) return;
+  listening = true;
+  window.addEventListener(
+    "load",
+    () => {
+      for (const pending of waitingForLoad) {
+        if (pending.paused) void pending.play().catch(() => {});
+      }
+      waitingForLoad.clear();
+    },
+    { once: true },
+  );
 }
