@@ -271,6 +271,15 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     added: "2026-07-24",
   },
   {
+    name: "Count Grid",
+    description:
+      "A grid of cards rushes in under a horizontal smear and settles on five, then the camera pulls back a fraction while every empty cell fills in from the middle out and the count jumps from five to five hundred",
+    category: "scenes",
+    href: "/docs/scenes/count-grid",
+    added: "2026-09-06",
+    tile: "wide",
+  },
+  {
     name: "Announce Title",
     description:
       "A four-shot launch title — the eyebrow rushes past the camera on a receding type plane, the name assembles on paper, and a macro pan cuts wide as the tagline builds itself last word first",
