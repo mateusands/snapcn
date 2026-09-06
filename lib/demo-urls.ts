@@ -72,6 +72,13 @@ export const RENDERED_DEMOS: readonly string[] = [
   // motion a live Player mispaces, and the rush is over before a dropped frame
   // can be forgiven.
   "punch-lines",
+  // The whole entry beat is a 22px horizontal smear that has to clear in five
+  // frames, and the fill collapses the grid by a fifth of its pitch in three.
+  // Both are over before a live Player can be forgiven a dropped frame, and the
+  // fill only reads as one move if every card lands on the frame it is supposed
+  // to — this is also a grid of images, so it is the one demo whose Player cost
+  // is thirty decodes rather than a few hundred rects.
+  "count-grid",
   "hero-launch",
   // Type is under a moving scale for most of the run — a receding 3D plane, a
   // 1.5x settle, then a whole line panned at 19x — and each of the first two

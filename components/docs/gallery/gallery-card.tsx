@@ -6,7 +6,6 @@ import Link from "next/link";
 import { type MouseEvent, useMemo, useRef } from "react";
 import { AbsoluteFill, Img } from "remotion";
 import {
-  CATEGORY_ICONS,
   type GalleryItem,
   resolveTile,
   slugFromHref,
@@ -108,8 +107,6 @@ export function GalleryCard({
     ? `${preview.width} / ${preview.height}`
     : TILE_RATIOS[resolveTile(item)];
 
-  const Icon = CATEGORY_ICONS[item.category];
-
   return (
     <Link
       ref={cardRef}
@@ -179,7 +176,7 @@ export function GalleryCard({
 
       {/* Hover footer — hidden until the card is hovered/focused so the resting
           card is pure video. A blur rises from the bottom (mask fades it up) and
-          carries the category coin and the open arrow. */}
+          carries the open arrow. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 h-24 opacity-0 transition-opacity duration-200 ease-out group-hover/card:opacity-100 group-focus-visible/card:opacity-100"
@@ -187,10 +184,11 @@ export function GalleryCard({
         <div className="absolute inset-0 backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,black_35%,transparent)] [mask-image:linear-gradient(to_top,black_35%,transparent)]" />
         <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
 
-        <span className="absolute bottom-3 left-3 flex size-9 items-center justify-center rounded-full bg-gallery-chip backdrop-blur-md">
-          <Icon className="size-4 text-foreground/80" />
-        </span>
-
+        {/* The arrow, and nothing else. There was a category coin on the left
+            too — the same icon the filter bar above already shows, on a card
+            the reader has just hovered inside a category they picked. It named
+            what they were looking at instead of telling them what happens if
+            they click. */}
         <span className="absolute bottom-3 right-3 flex size-9 items-center justify-center rounded-full bg-gallery-chip backdrop-blur-md transition-colors duration-150 group-hover/card:bg-foreground">
           <ArrowUpRight className="size-4 text-foreground transition-colors duration-150 group-hover/card:text-background" />
         </span>

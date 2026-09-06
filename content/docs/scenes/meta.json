@@ -3,6 +3,7 @@
   "collapsible": false,
   "pages": [
     "index",
+    "count-grid",
     "announce-title",
     "hero-launch",
     "orbit-gallery",
