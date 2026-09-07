@@ -19,6 +19,7 @@ import { phoneFrameConfig } from "@/registry/snap-cn/phone-frame/config";
 import { promptSendConfig } from "@/registry/snap-cn/prompt-send/config";
 import { promptZoomConfig } from "@/registry/snap-cn/prompt-zoom/config";
 import { punchLinesConfig } from "@/registry/snap-cn/punch-lines/config";
+import { rosterGrantConfig } from "@/registry/snap-cn/roster-grant/config";
 import { screenRecordingConfig } from "@/registry/snap-cn/screen-recording/config";
 import { searchTypingConfig } from "@/registry/snap-cn/search-typing/config";
 import { statusCycleConfig } from "@/registry/snap-cn/status-cycle/config";
@@ -32,6 +33,7 @@ import { textSwapConfig } from "@/registry/snap-cn/text-swap/config";
 import { textSwellConfig } from "@/registry/snap-cn/text-swell/config";
 import { wordCaptionsConfig } from "@/registry/snap-cn/word-captions/config";
 import { wordFlipConfig } from "@/registry/snap-cn/word-flip/config";
+import { wordmarkCutConfig } from "@/registry/snap-cn/wordmark-cut/config";
 import { typeMorphConfig } from "./snap-cn/type-morph/config";
 
 /**
@@ -68,6 +70,7 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "prompt-send": promptSendConfig,
   "prompt-zoom": promptZoomConfig,
   "punch-lines": punchLinesConfig,
+  "roster-grant": rosterGrantConfig,
   "screen-recording": screenRecordingConfig,
   "search-typing": searchTypingConfig,
   "status-cycle": statusCycleConfig,
@@ -81,6 +84,7 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "text-swell": textSwellConfig,
   "word-captions": wordCaptionsConfig,
   "word-flip": wordFlipConfig,
+  "wordmark-cut": wordmarkCutConfig,
 };
 
 // Append the shared controls (e.g. `speed`) to every component config so

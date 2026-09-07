@@ -21,6 +21,7 @@ import { PhoneFrame } from "@/registry/snap-cn/phone-frame";
 import { PromptSend } from "@/registry/snap-cn/prompt-send";
 import { PromptZoom } from "@/registry/snap-cn/prompt-zoom";
 import { PunchLines } from "@/registry/snap-cn/punch-lines";
+import { RosterGrant } from "@/registry/snap-cn/roster-grant";
 import { ScreenRecording } from "@/registry/snap-cn/screen-recording";
 import { SearchTyping } from "@/registry/snap-cn/search-typing";
 import { StatusCycle } from "@/registry/snap-cn/status-cycle";
@@ -34,6 +35,7 @@ import { TextSwap } from "@/registry/snap-cn/text-swap";
 import { TextSwell } from "@/registry/snap-cn/text-swell";
 import { WordCaptions } from "@/registry/snap-cn/word-captions";
 import { WordFlip } from "@/registry/snap-cn/word-flip";
+import { WordmarkCut } from "@/registry/snap-cn/wordmark-cut";
 import { TypeMorph } from "./snap-cn/type-morph";
 
 /**
@@ -101,6 +103,7 @@ const registry: Record<string, RegistryEntry> = {
   "prompt-send": { Component: PromptSend, config: CONFIGS["prompt-send"] },
   "prompt-zoom": { Component: PromptZoom, config: CONFIGS["prompt-zoom"] },
   "punch-lines": { Component: PunchLines, config: CONFIGS["punch-lines"] },
+  "roster-grant": { Component: RosterGrant, config: CONFIGS["roster-grant"] },
   "screen-recording": {
     Component: ScreenRecording,
     config: CONFIGS["screen-recording"],
@@ -129,6 +132,7 @@ const registry: Record<string, RegistryEntry> = {
     config: CONFIGS["word-captions"],
   },
   "word-flip": { Component: WordFlip, config: CONFIGS["word-flip"] },
+  "wordmark-cut": { Component: WordmarkCut, config: CONFIGS["wordmark-cut"] },
 };
 
 export default registry;

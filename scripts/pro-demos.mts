@@ -12,9 +12,10 @@ import { enableTailwind } from "@remotion/tailwind-v4";
 import { tsconfigWebpackAlias } from "./tsconfig-webpack-alias.mts";
 
 const PRO = [
-  "agent-chat", "agent-open", "app-reveal", "chat-thread", "lcd-type",
-  "manifesto", "phrase-swarm", "read-through", "sentence-set",
-  "showcase-drift", "stretch-word", "version-drop", "word-rush", "word-settle",
+  "agent-chat", "agent-open", "agent-tools", "app-reveal", "chat-thread",
+  "focus-pull", "gallery-push", "lcd-type", "manifesto", "phone-pitch",
+  "phrase-swarm", "read-through", "sentence-set", "showcase-drift",
+  "stretch-word", "version-drop", "word-rush", "word-settle",
 ];
 const out = process.argv[2];
 const root = process.cwd();
