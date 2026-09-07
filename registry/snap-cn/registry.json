@@ -375,6 +375,38 @@
       ]
     },
     {
+      "name": "roster-grant",
+      "type": "registry:component",
+      "docs": "Docs and props: https://snapcn.dev/docs/scenes/roster-grant?ref=cli — pass rows as three arrays of { name, role } and label for the button.",
+      "title": "Roster Grant",
+      "description": "Three rows of roster cards stream past a call to action, a pointer walks in and clicks it, and the monograms start turning to the accent one every seven frames — top row, middle, bottom, top, bottom, middle, so it reads as a system granting rather than a list iterating. The camera and the middle row's clearance around the pill settle on the same measured exponential; the outer rows deliberately do not, which is what stops the two sides ever looking symmetric.",
+      "dependencies": ["remotion", "@remotion/google-fonts"],
+      "registryDependencies": ["https://snapcn.dev/r/snap-cn-ui.json"],
+      "files": [
+        {
+          "path": "roster-grant/index.tsx",
+          "type": "registry:component",
+          "target": "components/snap-cn/roster-grant.tsx"
+        }
+      ]
+    },
+    {
+      "name": "wordmark-cut",
+      "type": "registry:component",
+      "docs": "Docs and props: https://snapcn.dev/docs/scenes/wordmark-cut?ref=cli — pass word for the wordmark and dotFrom/dotTo for the gradient.",
+      "title": "Wordmark Cut",
+      "description": "A wordmark twice the width of the frame, cooling from a lit gradient to ink while it settles, and then a hard cut onto its last letters and the dot \u2014 1.71\u00d7 nearer, with a shallow depth of field the wide shot does not have, which is the only thing that says the second shot is closer rather than just bigger. It holds a beat and pushes in, still accelerating on the last frame.",
+      "dependencies": ["remotion", "@remotion/google-fonts"],
+      "registryDependencies": ["https://snapcn.dev/r/snap-cn-ui.json"],
+      "files": [
+        {
+          "path": "wordmark-cut/index.tsx",
+          "type": "registry:component",
+          "target": "components/snap-cn/wordmark-cut.tsx"
+        }
+      ]
+    },
+    {
       "name": "cursor-track",
       "type": "registry:component",
       "docs": "Docs and props: https://snapcn.dev/docs/screens/cursor-track?ref=cli \u2014 pass mode=\"dark\" if you are rendering onto a dark frame \u2014 these default to shadcn's light palette and a bare Remotion render is black.",

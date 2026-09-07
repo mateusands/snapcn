@@ -79,6 +79,19 @@ export const RENDERED_DEMOS: readonly string[] = [
   // to — this is also a grid of images, so it is the one demo whose Player cost
   // is thirty decodes rather than a few hundred rects.
   "count-grid",
+  // A camera scale on type that is already 419px tall, through a masked blur
+  // layer, for the whole second half — and the beat it would ruin is a hard cut
+  // on one frame between two shots that are both moving. A Player that shows one
+  // frame for the wrong length of time turns that cut into a stumble.
+  "wordmark-cut",
+  // Nine cards of type under a camera that never stops scaling, for the whole
+  // 120 frames — every glyph is re-shaped at a brand-new size on every frame,
+  // and two of the three rows are sliding underneath it as well. It is the most
+  // expensive thing a browser can be asked to do per frame, and the beat it
+  // ruins is the one the shot is for: five monograms turning over seven frames
+  // apart reads as a cascade only if all five land on the frame they are meant
+  // to.
+  "roster-grant",
   "hero-launch",
   // Type is under a moving scale for most of the run — a receding 3D plane, a
   // 1.5x settle, then a whole line panned at 19x — and each of the first two

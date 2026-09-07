@@ -280,6 +280,22 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     tile: "wide",
   },
   {
+    name: "Roster Grant",
+    description:
+      "Three rows of roster cards stream past a call to action, a pointer walks in and clicks it, and the monograms start turning to the accent one every seven frames — top, middle, bottom, top, bottom, middle",
+    category: "scenes",
+    href: "/docs/scenes/roster-grant",
+    added: "2026-09-07",
+  },
+  {
+    name: "Wordmark Cut",
+    description:
+      "A wordmark twice the width of the frame, cooling from a lit gradient to ink as it settles, then a hard cut onto its last letters and the dot — nearer, shallower, and pushing in",
+    category: "scenes",
+    href: "/docs/scenes/wordmark-cut",
+    added: "2026-09-07",
+  },
+  {
     name: "Announce Title",
     description:
       "A four-shot launch title — the eyebrow rushes past the camera on a receding type plane, the name assembles on paper, and a macro pan cuts wide as the tagline builds itself last word first",

@@ -1,0 +1,93 @@
+---
+title: Roster Grant
+description: Three rows of roster cards stream past a call to action, a pointer walks in and clicks it, and the monograms start turning to the accent one every seven frames
+---
+
+<ComponentPreview name="roster-grant" />
+
+The "and everyone gets it" shot. The outer rows stream in opposite directions,
+the middle row parts around a single button, a pointer arrives and presses it,
+the button flips to the accent, and a beat later the roster starts lighting up —
+top row, middle, bottom, top, bottom, middle, one every seven frames, so it
+reads as a system granting rather than a list iterating.
+
+The camera and the middle row run off **one clock**. Fitted separately off the
+reference, the pull-back wanted a 0.75s exponential and the gap the middle row
+leaves around the button wanted a 0.75s exponential; two eases that agree are
+one ease. The outer rows deliberately do **not** share it — the bottom row
+spends a quarter of its travel in the first 0.3s and the top row does not, so
+the two sides are never symmetric about the button and the frame never settles
+into a pattern.
+
+## Installation
+
+<InstallBlock name="roster-grant" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="roster-grant" />
+
+## Usage
+
+```tsx
+// src/Root.tsx
+import { Composition } from "remotion";
+import { RosterGrant } from "@/components/snap-cn/roster-grant";
+
+const Grant = () => (
+  <RosterGrant
+    label="Give access"
+    rows={[
+      [
+        { name: "Alice Johnson", role: "Backend Engineer" },
+        { name: "Frank Liu", role: "Data Engineer" },
+        { name: "Bob Chen", role: "Frontend Engineer" },
+        { name: "Noah Mitchel", role: "Growth Marketer" },
+      ],
+      // …two more rows; each repeats across the frame
+    ]}
+  />
+);
+
+export const RemotionRoot = () => (
+  <Composition
+    id="RosterGrant"
+    component={Grant}
+    durationInFrames={120}
+    fps={30}
+    width={1280}
+    height={720}
+    defaultProps={{}}
+  />
+);
+```
+
+## Props
+
+| prop | type | default | what it does |
+| --- | --- | --- | --- |
+| `rows` | `RosterEntry[][]` | the snapcn registry | Three rows of `{ name, role, initials? }`. Each row repeats across the frame; four entries per row is enough that no row visibly tiles. |
+| `label` | `string` | `"Install all"` | The button's copy. The button is content-sized, and the pointer's landing point moves with its trailing edge. |
+| `accentColor` | `string` | `theme.primary` | The colour the button and the monograms turn. |
+| `theme` / `mode` | `Partial<SnapCnTheme>` / `"light" \| "dark"` | design system | Token overrides. |
+| `fontFamily` | `string` | Inter | A face from the registry's font list, or one you have loaded. |
+| `speed` | `number` | `1` | 1 is the measured speed. |
+
+## Timing
+
+Every number is read off the reference at 30fps.
+
+| beat | seconds | what moves |
+| --- | --- | --- |
+| settle | 0 – 3.0 | camera 1.184 → 1, middle row closing on the button |
+| approach | 0 – 1.32 | pointer arrives, in two moves rather than one |
+| press | 1.62 – 2.33 | button 1 → 0.931 → 1 — down in 0.18s, back in 0.53s |
+| flip | 1.69 | button goes accent, on one frame, no crossfade |
+| leave | 2.05 – 3.1 | pointer out to the bottom right |
+| grant | 2.33 + 0.233n | one monogram per step |
+| push | 3.0 – 4.0 | the whole scene pans left, accelerating |
+
+The press is three times as long coming up as going down. Symmetric, it stops
+feeling like a click and starts feeling like a bounce.
