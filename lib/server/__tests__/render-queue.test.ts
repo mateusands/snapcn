@@ -4,7 +4,7 @@
  * Run with:  pnpm vitest run lib/server/__tests__/render-queue.test.ts
  *
  * renderComposition (real Chromium) is mocked via vi.mock so nothing real runs.
-  * node:fs/promises (mkdir, stat) is also mocked — no real filesystem side-effects.
+ * node:fs/promises (mkdir, stat) is also mocked — no real filesystem side-effects.
  *
  * --- Seam note ---
  * render-queue.ts imports renderComposition from "./render" at module load time,

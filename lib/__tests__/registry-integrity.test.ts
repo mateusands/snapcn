@@ -84,4 +84,42 @@ describe("registry integrity", () => {
       "has a docs page but no manifest entry — its install command cannot work",
     ).toEqual([]);
   });
+
+  /**
+   * 4. **A pro row in the public index with no `meta.access`.**
+   *
+   * The fourth way, and the one that cost the most. `PRO_NAMES` is derived from
+   * that marker, `ALL_COMPONENT_NAMES` from `PRO_NAMES`, and the middleware
+   * answers an unknown name with a 404 *before* the route that would answer
+   * 402. So an unmarked pro row is not a cosmetic defect: the component is
+   * advertised in the catalogue and then denied by the server, and `shadcn add`
+   * prints "`@snapcn/manifesto` does not exist" at somebody who was trying to
+   * buy it.
+   *
+   * Nine of the fourteen listed pro rows were in exactly that state, and they
+   * were the nine most requested names on the site — 105 people in 7 days.
+   * Nothing failed: not the build, not a type, not a test. Hence this one.
+   *
+   * Skipped where the pro tier is not checked out, which is every public clone.
+   */
+  it("marks every listed pro component as pro", () => {
+    const manifest = path.join(ROOT, "registry/snap-cn-pro/registry.json");
+    if (!fs.existsSync(manifest)) return;
+
+    const proNames = new Set(
+      readManifest("registry/snap-cn-pro/registry.json"),
+    );
+    const index = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "public/r/registry.json"), "utf8"),
+    ) as { items: { name: string; meta?: { access?: string } }[] };
+
+    const unmarked = index.items
+      .filter((i) => proNames.has(i.name) && i.meta?.access !== "pro")
+      .map((i) => i.name);
+
+    expect(
+      unmarked,
+      'listed in public/r/registry.json but not marked `meta.access: "pro"` — the middleware will 404 these before the 402 route runs',
+    ).toEqual([]);
+  });
 });

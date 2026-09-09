@@ -71,6 +71,21 @@ export type ServerEvent =
    * one. Trimming the registry in ee250e3 left 68 such names in the wild.
    */
   | "registry_component_missing"
+  /**
+   * A `shadcn add` of a PAID component by somebody with no key — the paywall
+   * doing its job, and the only measure of demand for the pro tier there is.
+   *
+   * Separate from `registry_component_fetched` for the same reason the miss
+   * above is: middleware fires on the way in and cannot see a 402, so without
+   * this split every blocked install would land in the conversion count. On
+   * 2026-09-09 that would have been ~15 a day of pure paywall hits counted as
+   * installs.
+   *
+   * Read it on its own and it is the pre-launch order book: 105 people asked
+   * for a pro component in the 7 days after the catalogue went visible, before
+   * there was any way at all to pay.
+   */
+  | "registry_pro_blocked"
   /** `/llms.txt` or `/llms-full.txt` — the size of the AI-agent channel. */
   | "llms_txt_fetched"
   /** A docs search, with its result count. Zero-result queries are the roadmap. */

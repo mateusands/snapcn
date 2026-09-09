@@ -154,8 +154,17 @@ type AnalyticsEvents = {
   };
 
   /**
-   * An address joined the launch list. Not a proxy for intent to buy — it is
-   * the one channel we can reach again without paying for the reach twice.
+   * An address *asked* to join the launch list — the form submit, not the
+   * subscription. Since the list went double opt-in, joining happens in a
+   * second place this event cannot see: the confirm link, opened from a
+   * mailbox, on whatever device that mailbox is on.
+   *
+   * The confirm rate is deliberately not a second event. It is already a column
+   * — `select count(*) filter (where confirmed_at is not null), count(*) from
+   * subscriber` — and an event would only be a less reliable copy of it.
+   *
+   * Not a proxy for intent to buy either; it is the one channel we can reach
+   * again without paying for the reach twice.
    */
   email_subscribed: {
     /** Which surface earned it, so a launch mail can be split by intent. */

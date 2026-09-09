@@ -147,7 +147,42 @@ function silhouette(r: Raster) {
   return { w, h, cx: (l + rr) / 2 };
 }
 
+/**
+ * The reference's own presentation timestamps, in seconds.
+ *
+ * A macOS screen capture is variable-rate — this repo's references run 33ms to
+ * 50ms between frames, irregularly — so its frame *n* is not at *n/fps*.
+ * Comparing index to index silently slides the two clips apart by up to a third
+ * of a second by the end, which reads as "the component's timing is wrong" when
+ * the timing is fine and the comparison is not. Every reference frame is matched
+ * to the render frame at its own timestamp instead.
+ */
+function refTimes(file: string): number[] {
+  const r = spawnSync(
+    "ffprobe",
+    [
+      "-v",
+      "error",
+      "-select_streams",
+      "v",
+      "-show_entries",
+      "frame=pts_time",
+      "-of",
+      "csv=p=0",
+      file,
+    ],
+    { encoding: "utf8" },
+  );
+  if (r.status !== 0) throw new Error(`ffprobe: ${r.stderr?.slice(0, 300)}`);
+  return r.stdout
+    .trim()
+    .split("\n")
+    .map((s) => Number(s.replace(/,$/, "")))
+    .filter((v) => Number.isFinite(v));
+}
+
 const refs = refFrames(path.resolve(ref));
+const times = refTimes(path.resolve(ref));
 const first = decodePng(readFileSync(refs[0]!));
 const count = Math.min(Number(countArg ?? refs.length), refs.length);
 const outDir = outArg ? path.resolve(outArg) : null;
@@ -180,11 +215,17 @@ const serveUrl = await bundle({
   },
 });
 const selected = await selectComposition({ serveUrl, id: slug, inputProps });
+/** Reference frame n → the render frame that shares its timestamp. */
+const at = (n: number) =>
+  Math.min(
+    selected.durationInFrames - 1,
+    Math.round((times[n] ?? n / selected.fps) * selected.fps),
+  );
 const composition = {
   ...selected,
   width: first.width,
   height: first.height,
-  durationInFrames: count,
+  durationInFrames: Math.min(selected.durationInFrames, at(count - 1) + 1),
 };
 
 const mine = new Map<number, Uint8Array>();
@@ -206,14 +247,14 @@ console.log(
   `${slug} vs ${path.basename(ref)} — ${composition.width}×${composition.height}, ${count} frames\n`,
 );
 console.log(
-  "frame  meanΔ    maxΔ   %off>8    reference w×h @cx           render w×h @cx",
+  "ref→rnd  meanΔ    maxΔ   %off>8    reference w×h @cx           render w×h @cx",
 );
 let sum = 0;
 let worst = 0;
 let worstAt = 0;
 for (let n = 0; n < count; n++) {
   const a = decodePng(readFileSync(refs[n]!));
-  const buf = mine.get(n);
+  const buf = mine.get(at(n));
   if (!buf) continue;
   if (outDir)
     writeFileSync(path.join(outDir, `m${String(n).padStart(4, "0")}.png`), buf);
@@ -245,7 +286,7 @@ for (let n = 0; n < count; n++) {
       : "—"
     ).padStart(22);
   console.log(
-    `${String(n).padStart(5)}  ${mean.toFixed(2).padStart(6)}  ${mx.toFixed(0).padStart(6)}  ${((100 * big) / n2).toFixed(2).padStart(7)}   ${f(silhouette(a))}  ${f(silhouette(b))}`,
+    `${String(n).padStart(5)}→${String(at(n)).padStart(3)}  ${mean.toFixed(2).padStart(6)}  ${mx.toFixed(0).padStart(6)}  ${((100 * big) / n2).toFixed(2).padStart(7)}   ${f(silhouette(a))}  ${f(silhouette(b))}`,
   );
 }
 console.log(

@@ -33,8 +33,14 @@ export const INSTALL_ALL_NAMES: string[] = [
   ...snapCnUiRegistry.items,
 ].map((item) => item.name);
 
+export interface ProItem {
+  name: string;
+  title: string;
+  description: string;
+}
+
 /**
- * Paid components, by name.
+ * The paid components.
  *
  * Read off the *built* index rather than the pro manifest, and that is the
  * whole point: `registry/snap-cn-pro/` is gitignored, so a public checkout does
@@ -42,10 +48,22 @@ export const INSTALL_ALL_NAMES: string[] = [
  * is committed, carries a `meta.access` on every pro row, and is produced by the
  * same `registry:build` — so the list is correct in both checkouts and there is
  * no second thing to keep in step.
+ *
+ * Title and description come along because `/pro` has to describe what somebody
+ * just failed to install. Carrying them is safe for the same reason listing the
+ * row is: the built index has no `files[].content`, so this is the
+ * advertisement and not the source.
  */
-export const PRO_NAMES: string[] = builtRegistry.items
+export const PRO_ITEMS: ProItem[] = builtRegistry.items
   .filter((i) => (i as { meta?: { access?: string } }).meta?.access === "pro")
-  .map((i) => i.name);
+  .map((i) => ({
+    name: i.name,
+    title: (i as { title?: string }).title ?? i.name,
+    description: (i as { description?: string }).description ?? "",
+  }));
+
+/** The same list, as bare names — what every gate and lookup actually wants. */
+export const PRO_NAMES: string[] = PRO_ITEMS.map((i) => i.name);
 
 /**
  * Every name that resolves to something, free or paid.
