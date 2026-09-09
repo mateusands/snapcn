@@ -1,5 +1,9 @@
 import { after, type NextRequest, NextResponse } from "next/server";
-import { ALL_COMPONENT_NAMES, INSTALL_ALL_NAMES } from "@/config/site";
+import {
+  ALL_COMPONENT_NAMES,
+  INSTALL_ALL_NAMES,
+  PRO_NAMES,
+} from "@/config/site";
 import {
   anonymousId,
   captureServer,
@@ -18,6 +22,14 @@ import { suggestComponents } from "@/lib/registry-suggest";
  * ~17KB, which is nothing against the Edge bundle limit.
  */
 const KNOWN_COMPONENTS = new Set(ALL_COMPONENT_NAMES);
+
+/**
+ * The paid half of the above. Needed here and not just in the route because the
+ * route cannot report: middleware fires on the way IN, so it is the only place
+ * that sees every registry request, and it has to tell an install apart from a
+ * paywall hit before either has a status code.
+ */
+const PRO_COMPONENTS = new Set(PRO_NAMES);
 
 /**
  * Tracks the two things that happen *outside the browser*, and are therefore
@@ -113,10 +125,18 @@ export async function middleware(request: NextRequest) {
 
     const component = componentFromPath(pathname);
     if (component) {
+      // A pro name with no key cannot become an install, whatever the route
+      // decides — so it must not be counted as one. With a key it might, and
+      // is left in the conversion event rather than guessed at from here.
+      const paywalled =
+        PRO_COMPONENTS.has(component) && !request.headers.get("authorization");
+
       await captureServer(
-        KNOWN_COMPONENTS.has(component)
-          ? "registry_component_fetched"
-          : "registry_component_missing",
+        !KNOWN_COMPONENTS.has(component)
+          ? "registry_component_missing"
+          : paywalled
+            ? "registry_pro_blocked"
+            : "registry_component_fetched",
         distinctId,
         { ...shared, component },
       );
