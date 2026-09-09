@@ -10,6 +10,7 @@ import {
   planFor,
   QuotaExceededError,
 } from "@/lib/server/entitlements";
+import { clientIp } from "@/lib/server/client-ip";
 import { checkRateLimit } from "@/lib/server/rate-limit";
 import { enqueueRender, type RenderSpec } from "@/lib/server/render-queue";
 import {
@@ -301,39 +302,3 @@ export function quotaMessage(err: QuotaExceededError, plan: string): string {
   return `That's ${err.limit} exports this month — the fair-use ceiling.${who} Email support@simplifyingai.com and we'll lift it.`;
 }
 
-/**
- * The client address, read from the END of `x-forwarded-for`.
- *
- * This used to take the *first* hop, which is the conventional reading and was
- * fine while the value only fed analytics. It stopped being fine when the same
- * value became a money control: `x-forwarded-for` is a request header, so under
- * any proxy that *appends* rather than replaces — nginx's
- * `$proxy_add_x_forwarded_for`, which is what the Dockerfile path here uses —
- * the caller writes the first hop themselves. `X-Forwarded-For: <random>` per
- * request then resets both the rate-limit bucket and the free-render meter, and
- * the free tier is unbounded.
- *
- * Counting from the right fixes that: the last entry is the one *our* proxy
- * appended, and a caller cannot append after us. `TRUSTED_PROXY_HOPS` is how
- * many trailing entries belong to infrastructure we own — 0 (the default) is
- * correct for nginx-append and for any platform that sets a single value; raise
- * it to 1 on a platform that appends its own hop after the client's.
- *
- * ponytail: header-derived, so it is only as good as the proxy in front. A
- * misconfigured deployment that forwards the header untouched still lets a
- * caller pick their own bucket — the rate limiter below is the real floor.
- */
-function clientIp(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const hops = forwarded
-      .split(",")
-      .map((hop) => hop.trim())
-      .filter(Boolean);
-    const ours = Number(process.env.TRUSTED_PROXY_HOPS);
-    const skip = Number.isFinite(ours) && ours > 0 ? Math.floor(ours) : 0;
-    const client = hops[hops.length - 1 - skip] ?? hops[hops.length - 1];
-    if (client) return client;
-  }
-  return request.headers.get("x-real-ip")?.trim() || "unknown";
-}

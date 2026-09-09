@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  ANONYMOUS,
   CHECKOUT_PRODUCTS,
   isCheckoutProduct,
   PLANS,
@@ -71,5 +72,43 @@ describe("CHECKOUT_PRODUCTS", () => {
     expect(planForProduct("pack")).toBeNull();
     for (const foreign of ["ruixen-pro", "toString", undefined, null, ""])
       expect(planForProduct(foreign), String(foreign)).toBeNull();
+  });
+});
+
+/**
+ * The regression: `/r/[file]` gated the paid registry on `if (!plan)`, so every
+ * plan that was not free unlocked it — the $19 editor subscription installed
+ * the components sold separately beside it, and the route could not tell the
+ * difference because "paid" and "entitled to components" were the same
+ * expression. They are not the same question, and this is the test that stops
+ * the next paid tier from silently answering yes to both.
+ */
+describe("pro component entitlement", () => {
+  it("keeps components out of every plan that does not sell them", () => {
+    expect(PLANS.free.components).toBe(false);
+    expect(PLANS.starter.components).toBe(false);
+    expect(ANONYMOUS.components).toBe(false);
+  });
+
+  it("names the plans that unlock them, so a new tier has to opt in", () => {
+    const unlocked = (Object.keys(PLANS) as PlanName[]).filter(
+      (p) => PLANS[p].components,
+    );
+    expect(unlocked).toEqual(["pro"]);
+  });
+
+  it("sells no product that grants a components plan yet", () => {
+    // Pro is not launched. Every product on sale today must resolve to a plan
+    // that cannot install the paid registry — if this fails, something on the
+    // pricing page is shipping the components early.
+    for (const p of Object.keys(CHECKOUT_PRODUCTS) as Array<
+      keyof typeof CHECKOUT_PRODUCTS
+    >) {
+      const { plan } = CHECKOUT_PRODUCTS[p];
+      expect(
+        plan === null || PLANS[plan as PlanName].components === false,
+        p,
+      ).toBe(true);
+    }
   });
 });

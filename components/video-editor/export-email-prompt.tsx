@@ -86,7 +86,9 @@ export function ExportEmailPrompt({
         throw new Error(body?.error ?? "That didn't go through.");
       }
       trackEvent("email_subscribed", { source: "export" });
-      toast.success("You're on the list.");
+      // Not "you're on the list" — they are not, until the confirm link is
+      // opened. A toast that says otherwise is why nobody clicks the mail.
+      toast.success("Check your email to confirm.");
       close();
     } catch (err) {
       setSaving(false);

@@ -105,7 +105,8 @@ export function NewsletterForm({
         aria-live="polite"
         className="mt-3 min-h-5 text-sm text-muted-foreground"
       >
-        {status === "done" && "You're on the list."}
+        {status === "done" &&
+          "Almost — check your email and click the confirm link."}
         {status === "error" && error}
       </p>
     </div>

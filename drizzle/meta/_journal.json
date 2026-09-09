@@ -43,6 +43,13 @@
       "when": 1788444956563,
       "tag": "0005_modern_tomas",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788859119932,
+      "tag": "0006_email_double_opt_in",
+      "breakpoints": true
     }
   ]
 }

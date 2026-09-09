@@ -28,6 +28,17 @@ export interface PlanLimits {
   watermark: boolean;
   /** Days a hosted link stays up. Null means permanent. */
   linkTtlDays: number | null;
+  /**
+   * Whether this plan's API key installs the paid half of the registry.
+   *
+   * Named, rather than inferred from "is this plan paid?" — which is the
+   * question `/r/[file]` used to ask, and the two stop meaning the same thing
+   * the moment there is a second paid tier. The editor subscription sells a
+   * watermark and a resolution; the components are a separate purchase. A gate
+   * that reads "not free" hands every pro component to the cheapest plan on the
+   * page, and nobody files a bug about getting more than they paid for.
+   */
+  components: boolean;
 }
 
 /**
@@ -56,6 +67,7 @@ export const PLANS: Record<PlanName, PlanLimits> = {
     maxWidth: 1280,
     watermark: true,
     linkTtlDays: 7,
+    components: false,
   },
   starter: {
     // Ten a day. Deliberately not `Infinity`: the meter compares this in SQL,
@@ -65,12 +77,16 @@ export const PLANS: Record<PlanName, PlanLimits> = {
     maxWidth: 1920,
     watermark: false,
     linkTtlDays: null,
+    // The editor subscription. It sells the watermark and the resolution, and
+    // that is all it sells.
+    components: false,
   },
   pro: {
     renders: 1000,
     maxWidth: 1920,
     watermark: false,
     linkTtlDays: null,
+    components: true,
   },
 };
 

@@ -162,6 +162,65 @@ export const subscribers = pgTable("subscriber", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
   source: text("source").notNull().default("home"),
+  /**
+   * The only secret in the row. It addresses both the confirm link and the
+   * unsubscribe link, and it is a second column rather than `id` so the row's
+   * primary key never travels in a URL a mail client will log, scan and cache.
+   *
+   * One token for both jobs on purpose: the worst a confirm link can do in the
+   * wrong hands is unsubscribe an address that had not confirmed yet.
+   */
+  token: uuid("token").notNull().unique().defaultRandom(),
+  /**
+   * Null until the address itself opened the confirm link — the whole point of
+   * double opt-in. Nothing but the confirm mail is ever sent to a null row, so
+   * typing a stranger's address into the form costs them one message and
+   * nothing after it.
+   */
+  confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+  /**
+   * Set by the footer link, by Gmail's one-click header, or by a spam
+   * complaint arriving on the Resend webhook. Rows are kept rather than deleted
+   * so a later signup cannot silently re-add somebody who asked to leave — they
+   * have to confirm again.
+   */
+  unsubscribedAt: timestamp("unsubscribed_at", { withTimezone: true }),
+  /**
+   * When the confirm mail last went out. The re-send throttle reads it: the
+   * signup form is public, so without this an attacker with a list of proxies
+   * can point it at one address and mail-bomb a stranger in our name.
+   */
+  confirmSentAt: timestamp("confirm_sent_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+/**
+ * Addresses no mail may be sent to, ever again.
+ *
+ * Written only by the Resend webhook, from a hard bounce or a spam complaint,
+ * and read by `sendEmail` before every single send — transactional included.
+ * That last part looks aggressive and is the point: a mailbox that answered
+ * "no such user" will answer it again, and a sender that keeps asking is a
+ * sender Gmail stops trusting for *every* stream. A dead address is not worth
+ * the sign-in links of the people who share the domain reputation with it.
+ *
+ * Separate from `subscriber.unsubscribedAt`, which means something else
+ * entirely: unsubscribed is a preference about one list, suppressed is a fact
+ * about the address. Somebody can be on the list and suppressed, or neither.
+ *
+ * Keyed by the address, not by a row id: the question this table exists to
+ * answer is "may I mail this string", and every other shape makes that a join.
+ */
+export const emailSuppressions = pgTable("email_suppression", {
+  email: text("email").primaryKey(),
+  /** `bounced` or `complained`. Ours, not the provider's — see `suppressionFor`. */
+  reason: text("reason").notNull(),
+  /** The provider's own words, kept only so a surprise can be read back. */
+  detail: text("detail"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

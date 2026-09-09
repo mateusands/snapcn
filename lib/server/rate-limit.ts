@@ -27,7 +27,8 @@ export type RateLimitBucket =
   | "audio"
   | "showcase"
   | "project"
-  | "checkout";
+  | "checkout"
+  | "subscribe";
 
 /** Env prefix per bucket. `render` keeps `RENDER_*` so existing config still applies. */
 const ENV_PREFIX: Record<RateLimitBucket, string> = {
@@ -36,6 +37,7 @@ const ENV_PREFIX: Record<RateLimitBucket, string> = {
   showcase: "SHOWCASE",
   project: "PROJECT",
   checkout: "CHECKOUT",
+  subscribe: "SUBSCRIBE",
 };
 
 /**
@@ -52,6 +54,11 @@ const DEFAULT_LIMIT: Record<RateLimitBucket, number> = {
   // A purchase is a deliberate, once-in-a-while act. The budget exists to stop
   // a loop hammering Dodo on our API key, not to pace a human.
   checkout: 5,
+  // The signup form is a public text box that makes us send mail to an address
+  // the submitter chose. Unbudgeted, it is a mail cannon pointed at whoever the
+  // submitter dislikes, fired from our domain and charged to our reputation.
+  // Three a minute is more than a human types and far less than a script wants.
+  subscribe: 3,
 };
 
 function envInt(name: string, fallback: number, min = 1): number {
