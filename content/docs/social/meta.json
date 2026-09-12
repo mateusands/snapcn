@@ -3,6 +3,7 @@
   "collapsible": false,
   "pages": [
     "index",
-    "follower-rush"
+    "follower-rush",
+    "channel-thread"
   ]
 }

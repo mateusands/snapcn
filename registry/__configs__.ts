@@ -4,6 +4,8 @@ import { announceTitleConfig } from "@/registry/snap-cn/announce-title/config";
 import { answerHighlightConfig } from "@/registry/snap-cn/answer-highlight/config";
 import { answerStreamConfig } from "@/registry/snap-cn/answer-stream/config";
 import { blockWordmarkConfig } from "@/registry/snap-cn/block-wordmark/config";
+import { cardRailConfig } from "@/registry/snap-cn/card-rail/config";
+import { channelThreadConfig } from "@/registry/snap-cn/channel-thread/config";
 import { countGridConfig } from "@/registry/snap-cn/count-grid/config";
 import { cursorTrackConfig } from "@/registry/snap-cn/cursor-track/config";
 import { followerRushConfig } from "@/registry/snap-cn/follower-rush/config";
@@ -11,6 +13,7 @@ import { heroLaunchConfig } from "@/registry/snap-cn/hero-launch/config";
 import { karaokeCaptionsConfig } from "@/registry/snap-cn/karaoke-captions/config";
 import { laptopFrameConfig } from "@/registry/snap-cn/laptop-frame/config";
 import { logoAssembleConfig } from "@/registry/snap-cn/logo-assemble/config";
+import { logoCollapseConfig } from "@/registry/snap-cn/logo-collapse/config";
 import { logoDriftConfig } from "@/registry/snap-cn/logo-drift/config";
 import { logoFlickerConfig } from "@/registry/snap-cn/logo-flicker/config";
 import { moodboardRevealConfig } from "@/registry/snap-cn/moodboard-reveal/config";
@@ -33,6 +36,8 @@ import { textSwapConfig } from "@/registry/snap-cn/text-swap/config";
 import { textSwellConfig } from "@/registry/snap-cn/text-swell/config";
 import { wordCaptionsConfig } from "@/registry/snap-cn/word-captions/config";
 import { wordFlipConfig } from "@/registry/snap-cn/word-flip/config";
+import { wordGatherConfig } from "@/registry/snap-cn/word-gather/config";
+import { wordWheelConfig } from "@/registry/snap-cn/word-wheel/config";
 import { wordmarkCutConfig } from "@/registry/snap-cn/wordmark-cut/config";
 import { typeMorphConfig } from "./snap-cn/type-morph/config";
 
@@ -76,6 +81,11 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "status-cycle": statusCycleConfig,
   "terminal-simulator": terminalSimulatorConfig,
   "text-build": textBuildConfig,
+  "channel-thread": channelThreadConfig,
+  "card-rail": cardRailConfig,
+  "logo-collapse": logoCollapseConfig,
+  "word-gather": wordGatherConfig,
+  "word-wheel": wordWheelConfig,
   "text-highlight": textHighlightConfig,
   "text-reveal": textRevealConfig,
   "text-rewrite": textRewriteConfig,

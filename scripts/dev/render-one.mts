@@ -43,6 +43,11 @@ await ensureBrowser();
 
 const serveUrl = await bundle({
   entryPoint: path.join(root, "src", "remotion", "dev-entry.ts"),
+  // Without this `staticFile()` resolves to nothing and every component that
+  // takes an image renders its fallback — silently, and only in this script,
+  // because `match-ref` has always served it. A component looks broken and the
+  // component is fine.
+  publicDir: path.join(root, "public"),
   // The entry is side-effect-only (CSS, then the root) so `registerRoot` lives
   // one import away, which is the same shape the shipped entries use.
   ignoreRegisterRootWarning: true,

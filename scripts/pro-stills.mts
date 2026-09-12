@@ -5,8 +5,8 @@ import { enableTailwind } from "@remotion/tailwind-v4";
 import { tsconfigWebpackAlias } from "./tsconfig-webpack-alias.mts";
 
 const PRO = [
-  "agent-chat", "agent-open", "app-reveal", "build-out", "chat-thread", "lcd-type",
-  "manifesto", "phrase-swarm", "read-through", "say-it", "sentence-set",
+  "agent-chat", "agent-run", "agent-open", "app-reveal", "build-out", "chat-thread", "lcd-type",
+  "manifesto", "phrase-swarm", "read-through", "say-it", "scatter-bloom", "sentence-set",
   "showcase-drift", "stretch-word", "version-drop", "word-rush", "word-settle",
 ];
 const out = process.argv[2];

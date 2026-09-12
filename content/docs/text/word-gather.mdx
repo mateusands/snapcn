@@ -1,0 +1,115 @@
+---
+title: Word Gather
+description: A sentence that arrives one word at a time, out of order, and gathers — the first word holds the frame alone, then the rest drop in around it in the accent colour and slide the last of the way home, turning to ink as they settle
+---
+
+<ComponentPreview name="word-gather" />
+
+The first word holds the middle of the frame on its own. Then the rest of the
+sentence drops in around it — not in reading order, and not where it belongs —
+each word landing somewhere near its slot in the accent colour and sliding the
+last of the way home, turning to ink as it settles. The line makes room for them
+as they come, and when the last one is down the whole block eases back to its
+real size.
+
+## How it moves
+
+**Two layouts, and one word that moves between them.** The scene is only ever in
+one of two arrangements: the lead word alone, centred on the card, or the whole
+sentence wrapped and centred. Every other word appears in the second one and
+never sees the first.
+
+**The lead word runs on two clocks.** It drops onto its line in seven frames and
+slides left across the line over twenty-one — because one of those is a line
+changing and the other is a line reflowing, and they are not the same beat.
+
+**The layout is arithmetic, not the browser's.** Word advances come from
+`measureText`; the wrap, the centring and every slot are computed here. A word
+has to be transformed from somewhere else to its slot, and to know where its slot
+*is* you have to have laid the line out yourself. It also means the line break
+cannot move on you frame to frame — the layout is solved once, at scale 1, and
+the block's own scale is a transform over the top of it.
+
+## Notes
+
+`accent` is the colour a word wears while it is still travelling; leave it blank
+and the theme's accent is used. It is a travelling state, not a highlight — every
+word ends in ink.
+
+`maxWidth` is where the line breaks, in card pixels. Because the layout is solved
+once rather than reflowed, changing it moves the break cleanly instead of making
+words jump between lines mid-animation.
+
+## Installation
+
+<InstallBlock name="word-gather" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="word-gather" />
+
+## Usage
+
+```tsx
+// src/Root.tsx
+import { Composition } from "remotion";
+import { WordGather } from "@/components/snap-cn/word-gather";
+
+const Line = () => <WordGather text="Every scene is yours to own." />;
+
+export const RemotionRoot = () => (
+  <Composition
+    id="WordGather"
+    component={Line}
+    durationInFrames={49}
+    fps={30}
+    width={1280}
+    height={720}
+  />
+);
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      name: "text",
+      type: "string",
+      default: '"Every scene is yours to own."',
+      description:
+        "The sentence. Its first word is the one that holds the frame alone",
+    },
+    {
+      name: "maxWidth",
+      type: "number",
+      default: "330",
+      description: "Where the line breaks, in card pixels",
+    },
+    {
+      name: "accent",
+      type: "string",
+      description:
+        "The colour a word wears while it is still travelling. Blank uses the theme's accent",
+    },
+    {
+      name: "fontFamily",
+      type: "string",
+      default: '"Default"',
+      description: "Figtree unless you name one of the loaded faces",
+    },
+    {
+      name: "theme",
+      type: "Partial<SnapCnTheme>",
+      description:
+        "Design-system token overrides. Anything you leave out falls back to the shadcn defaults",
+    },
+    {
+      name: "mode",
+      type: '"light" | "dark"',
+      description: "Which end of the design system to resolve tokens against",
+    },
+  ]}
+/>

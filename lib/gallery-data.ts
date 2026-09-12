@@ -87,6 +87,46 @@ export interface GalleryItem {
 
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
+    name: "Card Rail",
+    description:
+      "A rail of cards flicked sideways across a tilted plane — pushed three times, each flick leaving at speed and decelerating for over a second into the next, while the plane's foot runs a fifth wider than its head",
+    category: "scenes",
+    href: "/docs/scenes/card-rail",
+    added: "2026-09-12",
+  },
+  {
+    name: "Logo Collapse",
+    description:
+      "A stack of shots flicked through, collapsing into your mark, and the wordmark landing beside it — each card smaller and held for less time than the last, cutting rather than tweening, until the stack resolves into a logo",
+    category: "logos",
+    href: "/docs/logos/logo-collapse",
+    added: "2026-09-12",
+  },
+  {
+    name: "Channel Thread",
+    description:
+      "A work chat filling itself in — faces, a name in bold, a quiet timestamp and messages as plain lines on a dark stage; three dots hold a line until the words arrive, and the transcript scrolls once per arrival and is perfectly still in between",
+    category: "social",
+    href: "/docs/social/channel-thread",
+    added: "2026-09-12",
+  },
+  {
+    name: "Word Wheel",
+    description:
+      "A column of words that spins like a reel and stops on one of them — the lead-in holds the left of the line while the answer rolls into the slot beside it, decelerating over a second and three quarters",
+    category: "text",
+    href: "/docs/text/word-wheel",
+    added: "2026-09-12",
+  },
+  {
+    name: "Word Gather",
+    description:
+      "A sentence that arrives one word at a time, out of order, and gathers — the first word holds the frame alone, then the rest drop in around it in the accent colour and slide the last of the way home",
+    category: "text",
+    href: "/docs/text/word-gather",
+    added: "2026-09-11",
+  },
+  {
     name: "Type Morph",
     description:
       "A headline that types itself under a glowing caret, sheds its lead, morphs letter by letter, and ends under a colour flood",

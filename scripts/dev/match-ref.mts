@@ -215,11 +215,26 @@ const serveUrl = await bundle({
   },
 });
 const selected = await selectComposition({ serveUrl, id: slug, inputProps });
-/** Reference frame n → the render frame that shares its timestamp. */
+/**
+ * Reference frame n → the render frame it is *showing*.
+ *
+ * Floor, not round. A capture presents whatever the page had painted at that
+ * instant, so a recorded frame at 0.7583s is still showing content frame 22 of
+ * a 30fps page, not 23. The difference is one frame on about a tenth of a
+ * variable-rate recording — and it is checkable rather than a matter of taste:
+ * where a capture sampled faster than the page rendered, consecutive recorded
+ * frames are *byte-identical*, and only `floor` maps every such pair to the
+ * same render frame. Rounding splits them across two, and the diff reports a
+ * component whose timing is right as being a frame out, twice a second.
+ */
 const at = (n: number) =>
   Math.min(
     selected.durationInFrames - 1,
-    Math.round((times[n] ?? n / selected.fps) * selected.fps),
+    // The epsilon is for ffprobe's printing, not for the timing: it emits
+    // 0.033333 for 1/30, which multiplies out to 0.99999 and floors to the
+    // wrong frame. Timestamps land on the container's tick grid, so nothing
+    // real sits within a thousandth of an integer.
+    Math.floor((times[n] ?? n / selected.fps) * selected.fps + 1e-3),
   );
 const composition = {
   ...selected,
