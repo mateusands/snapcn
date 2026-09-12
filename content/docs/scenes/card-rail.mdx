@@ -1,0 +1,176 @@
+---
+title: Card Rail
+description: A rail of cards flicked sideways across a tilted plane — the rail leaves at speed, decelerates for over a second and comes to rest about a card further along, while the plane's foot runs a fifth wider than its head
+---
+
+<ComponentPreview name="card-rail" />
+
+The cards do not crawl past on a loop. They are **flicked**: the rail leaves at
+speed, decelerates for well over a second and comes to rest about a card further
+along, the way a carousel behaves under a thumb rather than under a timer. A
+title holds the top of the frame and does not move with them.
+
+## The plane is tilted, and that is the whole look
+
+The rail is not flat to the camera. Measured on the card edges of a recording,
+the horizontal scale grows **0.000825 per pixel of height** about the frame's own
+centre line — the foot of a card is a fifth wider than its head — while
+horizontals stay horizontal and the type stays upright. That is a plane rotated
+about a horizontal axis under perspective, and it is why a row of plain
+rectangles reads as a surface receding into the frame rather than as a filmstrip.
+
+`DEPTH`, `TILT` and `HORIZON` are the three numbers that describe it, and they
+are deliberately separate from the card metrics: change the card size and the
+plane does not move. `HORIZON` is the height at which the plane is exactly
+life-size — above it the rail is smaller and further away, below it nearer and
+larger. It is solved, not chosen: the card's width at two heights puts it most of
+the way down the visible card rather than at the frame's middle.
+
+## Flicks add up
+
+`flicks` is how many times the rail is pushed and `every` the frames between one
+leaving and the next. They are a **sum**, not a queue: each flick is the same
+measured curve started `every` frames after the last, so a flick begun while the
+one before it is still creeping carries that creep with it — which is what
+repeated swipes actually do. The default is three, thirty frames apart, which
+carries the rail about three cards along.
+
+That is also why the card lists are worth filling out. Three flicks show six
+cards; five entries would start repeating on screen.
+
+## The flick is measured
+
+`FLICK` is the curve off the recording. It peaks at 29px a frame three frames in
+and is still moving at 2px a frame a second later. No standard ease has that tail
+— a cubic-out arrives four times too early and a spring overshoots something that
+never overshoots.
+
+And the travel is **not** one card pitch. A rail that advanced by exactly one
+pitch would be an assumption; measured, the recording's travels 333 where its
+pitch is 325. A flick ends where the momentum ran out, not on a snap, and those
+eight pixels are the difference between a carousel and a surface somebody pushed.
+
+## Cards, and cards made elsewhere
+
+`images`, `titles`, `notes` and `tags` are parallel lists — one entry per card —
+and the rail repeats them rather than running out — though with three flicks you
+want at least six real ones, or the repeat shows. The rail has a beginning, though: nothing is drawn before the first
+card, because a loop that wraps round puts a card in the empty half of the frame
+the scene opens on.
+
+Leave the text fields blank and the picture becomes the whole card. That is not a
+special case for its own sake — it is what lets a card designed somewhere else be
+handed in as one image.
+
+## Notes
+
+`backdrop` takes two colour stops or one picture. A picture because a brand
+backdrop is often not a gradient at all: the recording this was measured from has
+corners that satisfy a linear fit to within five parts in 235, and a middle forty
+levels darker than that fit predicts — a mesh or a painted plate, not something
+two stops can be talked into.
+
+`from` may be negative, which opens the scene already in flight. That is how the
+recording starts, and it is often what you want at the head of a video.
+
+## Installation
+
+<InstallBlock name="card-rail" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="card-rail" />
+
+## Usage
+
+```tsx
+// src/Root.tsx
+import { Composition } from "remotion";
+import { CardRail } from "@/components/snap-cn/card-rail";
+
+const Rail = () => <CardRail heading="Browse scenes" />;
+
+export const RemotionRoot = () => (
+  <Composition
+    id="CardRail"
+    component={Rail}
+    durationInFrames={54}
+    fps={30}
+    width={1280}
+    height={720}
+  />
+);
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      name: "images",
+      type: "string",
+      description:
+        "The pictures, split by `|` — not by comma, because a data: URL has one of its own. The rail repeats them if it runs out",
+    },
+    { name: "titles", type: "string", description: "One title per card, split by `|`" },
+    { name: "notes", type: "string", description: "One line of small print per card" },
+    { name: "tags", type: "string", description: "One tag per card" },
+    {
+      name: "heading",
+      type: "string",
+      default: '"Browse scenes"',
+      description: "The line that holds the top of the frame",
+    },
+    {
+      name: "flicks",
+      type: "number",
+      default: "3",
+      description:
+        "How many times the rail is pushed. Each one carries it about another card along",
+    },
+    {
+      name: "every",
+      type: "number",
+      default: "30",
+      description: "Frames between one flick leaving and the next",
+    },
+    {
+      name: "from",
+      type: "number",
+      default: "0",
+      description:
+        "Frame the flick starts on. Negative opens the scene already moving",
+    },
+    {
+      name: "offset",
+      type: "number",
+      default: "0",
+      description: "Where the rail sits before it moves, in layout pixels",
+    },
+    {
+      name: "backdrop",
+      type: "string",
+      description:
+        "Two colour stops split by `|`, or one picture. Blank uses the theme's accent",
+    },
+    {
+      name: "fontFamily",
+      type: "string",
+      default: '"Default"',
+      description: "Figtree unless you name one of the loaded faces",
+    },
+    {
+      name: "theme",
+      type: "Partial<SnapCnTheme>",
+      description:
+        "Design-system token overrides. Anything you leave out falls back to the shadcn defaults",
+    },
+    {
+      name: "mode",
+      type: '"light" | "dark"',
+      description: "Which end of the design system to resolve tokens against",
+    },
+  ]}
+/>

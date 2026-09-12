@@ -6,6 +6,8 @@ import { AnnounceTitle } from "@/registry/snap-cn/announce-title";
 import { AnswerHighlight } from "@/registry/snap-cn/answer-highlight";
 import { AnswerStream } from "@/registry/snap-cn/answer-stream";
 import { BlockWordmark } from "@/registry/snap-cn/block-wordmark";
+import { CardRail } from "@/registry/snap-cn/card-rail";
+import { ChannelThread } from "@/registry/snap-cn/channel-thread";
 import { CountGrid } from "@/registry/snap-cn/count-grid";
 import { CursorTrack } from "@/registry/snap-cn/cursor-track";
 import { FollowerRush } from "@/registry/snap-cn/follower-rush";
@@ -13,6 +15,7 @@ import { HeroLaunch } from "@/registry/snap-cn/hero-launch";
 import { KaraokeCaptions } from "@/registry/snap-cn/karaoke-captions";
 import { LaptopFrame } from "@/registry/snap-cn/laptop-frame";
 import { LogoAssemble } from "@/registry/snap-cn/logo-assemble";
+import { LogoCollapse } from "@/registry/snap-cn/logo-collapse";
 import { LogoDrift } from "@/registry/snap-cn/logo-drift";
 import { LogoFlicker } from "@/registry/snap-cn/logo-flicker";
 import { MoodboardReveal } from "@/registry/snap-cn/moodboard-reveal";
@@ -35,6 +38,8 @@ import { TextSwap } from "@/registry/snap-cn/text-swap";
 import { TextSwell } from "@/registry/snap-cn/text-swell";
 import { WordCaptions } from "@/registry/snap-cn/word-captions";
 import { WordFlip } from "@/registry/snap-cn/word-flip";
+import { WordGather } from "@/registry/snap-cn/word-gather";
+import { WordWheel } from "@/registry/snap-cn/word-wheel";
 import { WordmarkCut } from "@/registry/snap-cn/wordmark-cut";
 import { TypeMorph } from "./snap-cn/type-morph";
 
@@ -118,6 +123,17 @@ const registry: Record<string, RegistryEntry> = {
     config: CONFIGS["terminal-simulator"],
   },
   "text-build": { Component: TextBuild, config: CONFIGS["text-build"] },
+  "channel-thread": {
+    Component: ChannelThread,
+    config: CONFIGS["channel-thread"],
+  },
+  "card-rail": { Component: CardRail, config: CONFIGS["card-rail"] },
+  "logo-collapse": {
+    Component: LogoCollapse,
+    config: CONFIGS["logo-collapse"],
+  },
+  "word-gather": { Component: WordGather, config: CONFIGS["word-gather"] },
+  "word-wheel": { Component: WordWheel, config: CONFIGS["word-wheel"] },
   "text-highlight": {
     Component: TextHighlight,
     config: CONFIGS["text-highlight"],

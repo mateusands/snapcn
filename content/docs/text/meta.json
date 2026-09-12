@@ -12,6 +12,8 @@
     "text-rewrite",
     "text-select",
     "word-flip",
-    "type-morph"
+    "type-morph",
+    "word-gather",
+    "word-wheel"
   ]
 }

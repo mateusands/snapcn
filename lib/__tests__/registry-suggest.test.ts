@@ -12,11 +12,12 @@ describe("suggestComponents", () => {
     //
     // "dynamic-grid" used to be on this list and has come off it: we now ship
     // `count-grid`, so someone asking for a dynamic grid is being pointed at a
-    // grid, which is the suggester working rather than guessing.
+    // grid, which is the suggester working rather than guessing. "number-wheel"
+    // came off for the same reason when `word-wheel` shipped — a reel of words
+    // is what that person was describing.
     for (const invented of [
       "blur-out-up",
       "soft-blur-in",
-      "number-wheel",
       "shader-warp",
       "line-by-line-slide",
       "frosted-glass-wipe",
